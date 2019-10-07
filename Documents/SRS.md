@@ -46,7 +46,7 @@
 
 <a name="analogues"/>
 
-## 1.3 Аналоги
+## 1.4 Аналоги
  Сравнение по функционалу |[TuneIn Radio](https://tunein.com/)| [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en)
 --- | :-: | :-: | :-:
 Доступно на Android |Да|Да
