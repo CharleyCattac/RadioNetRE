@@ -75,7 +75,8 @@
 <a name="user_requirements"/>
 
 ## 2.3 Интерфейс пользователя
-
+Основной экран.  
+![Основной экран](UI Mockup.png)  
 
 <a name="user_characteristics"/>
 
