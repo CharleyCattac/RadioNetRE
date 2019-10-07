@@ -6,14 +6,14 @@
 1.1 [Назначение](#purpose)  
 1.2 [Бизнес-требования](#scope)  
 1.3 [Глоссарий](#glossary)  
-1.4 [Аналоги](#analogues)  
+1.4 [Обзор аналогов](#analogues)  
 2 [Требования к окружению](#requirements)  
 2.1 [Программные требования](#software_requirements)    
 2.2 [Технические требования](#hardware_requirements)  
 2.3 [Интерфейс пользователя](#user_requirements)  
 2.4 [Характеристики пользователя](#user_characteristics)  
 2.5 [Предположения и зависимости](#assumptions_and_dependensies)  
-3 [System requirements](#system_requirements)  
+3 [Системные требования](#system_requirements)  
 3.1 [Функциональные требования](#functional_requirements)  
 3.2 [Нефункциональные требования](#nonfunctional_requirements)  
 3.2.1	[Атрибуты качества](#quality_attributes)  
@@ -46,8 +46,8 @@
 
 <a name="analogues"/>
 
-## 1.4 Аналоги
- Сравнение по функционалу |[TuneIn Radio](https://tunein.com/)| [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en)
+## 1.4 Обзор аналогов
+ |[TuneIn Radio](https://tunein.com/)| [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en)
 --- | :-: | :-: | :-:
 Доступно на Android |Да|Да
 Поддержка русского языка |Да|Нет
