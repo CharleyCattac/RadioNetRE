@@ -47,13 +47,21 @@
 <a name="analogues"/>
 
 ## 1.4 Обзор аналогов
- |[TuneIn Radio](https://tunein.com/)| [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en)
+ Известные аналоги: [TuneIn Radio](https://tunein.com/) и [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en).  
 --- | :-: | :-: | :-:
 Доступно на Android |Да|Да
 Поддержка русского языка |Да|Нет
 Бесплатно |Нет|Да
 Список "любимых станций" | Да|Да
 Запись аудио | Нет|Нет
+
+ Возможности |[TuneIn Radio]| [PCRadio] 
+--- | :-: | :-: 
+Доступно на Android |+|-
+Поддержка русского языка | +|-
+Бесплатно |+|-|-
+Создание своего рецепта | -|+
+Создание списка покупок | +|+
 
 <a name="requirements"/>
 
