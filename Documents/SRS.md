@@ -76,7 +76,7 @@
 
 ## 2.3 Интерфейс пользователя
   
-![Основной экран](../mockups/UI.png)  
+![Основной экран](/mockups/UI.png)  
 
 <a name="user_characteristics"/>
 
