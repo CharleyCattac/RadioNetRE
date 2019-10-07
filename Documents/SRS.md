@@ -49,7 +49,7 @@
 ## 1.4 Обзор аналогов
  Известные аналоги: [TuneIn Radio](https://tunein.com/) и [PCRadio](https://play.google.com/store/apps/details?id=com.maxxt.pcradio&hl=en).  
 
- Возможности |[TuneIn Radio]| [PCRadio] 
+ Возможности |TuneIn Radio| PCRadio 
 --- | :-: | :-: 
 Доступно на Android |Да|Да
 Поддержка русского языка | Да|Нет
