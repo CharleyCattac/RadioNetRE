@@ -66,7 +66,7 @@
 ## 2.1 Программные требования
 * приложение должно быть написано на языке Java;
 * для написания приложения в качестве IDE будет использоваться Android Studio, которое предоставит приложению все необходимые программные интерфейсы;  
-* для получения метаданных будет использоваться API [Radio Browser](http://www.radio-browser.info/webservice#General)
+* для получения метаданных будет использоваться API [Radio Browser](http://www.radio-browser.info/webservice#General).
 
 <a name="hardware_requirements"/>
 
