@@ -11,17 +11,17 @@
 
 ### 2. Поиск нужной станции <a name="2"></a>
 
-![Регистрация в приложении](../Sequence/Images/Seq_search.png)
+![Поиск нужной станции](../Sequence/Images/Seq_search.png)
   
 ### 3. Прослушивание желаемой станции<a name="3"></a>
 
-![Просмотр рецептов пользователя](../Sequence/Images/Seq_listening.png)
+![Прослушивание желаемой станции](../Sequence/Images/Seq_listening.png)
 
 ### 4. Приостановка/продолжение воспроизведения<a name="4"></a>
 
-![Создание нового рецепта](../Sequence/Images/Seq_startpause.png)
+![Приостановка/продолжение воспроизведения](../Sequence/Images/Seq_playpause.png)
 
 ### 5. Сохранение и запись аудио<a name="5"></a>
 
-![Поиск рецепта по названию](../Sequence/Images/Seq_download.png)
+![Сохранение и запись аудио](../Sequence/Images/Seq_download.png)
 
