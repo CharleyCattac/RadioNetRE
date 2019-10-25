@@ -1,5 +1,5 @@
 # RadioNetRE
-Интернет-радио для ОС Android.  
+Internet radio for Android OS.  
 ###### Проект по ТРиТПО, 5 семестр обучения.  
-### [Документация](/Documents)  
-### [Код](/Code/app/src/main/java/com/spo/radionetre)
+### [Documents RUS](/Documents)  
+### [Code](/Code/app/src/main/java/com/spo/radionetre)
