@@ -77,7 +77,7 @@
 
 ## 2.3 Интерфейс пользователя
   
-![Основной экран](../Documents/mockups/UI.png)  
+![Основной экран](../Documents/mockups/Show_mockup.png)  
   
  Функция |Действие 
 --- | :-: 
