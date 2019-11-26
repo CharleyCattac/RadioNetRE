@@ -1,4 +1,4 @@
-package com.spo.radionetre;
+package com.radionetre;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -19,8 +19,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.spo.radionetre", appContext.getPackageName());
+        assertEquals("com.radionetre", appContext.getPackageName());
     }
 }

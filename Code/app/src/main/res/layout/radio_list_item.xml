@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    style="@style/RadioListItem">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/radio_picture"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        style="@style/RadioListItemPicture"/>
+
+    <TextView
+        android:id="@+id/radio_name"
+        android:layout_toRightOf="@id/radio_picture"
+        style="@style/RadioListItemText"/>
+
+</RelativeLayout>

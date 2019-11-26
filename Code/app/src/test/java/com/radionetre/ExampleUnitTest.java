@@ -1,4 +1,4 @@
-package com.spo.radionetre;
+package com.radionetre;
 
 import org.junit.Test;
 
