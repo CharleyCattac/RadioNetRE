@@ -45,7 +45,7 @@ public class StationsFragment extends Fragment {
     RequestQueue apiRequestQueue;
     JsonObjectRequest apiRequest;
 
-    MainActivity.StationListItem clickCallback;
+    StationListItem clickCallback;
 
     /*
      Remember last search query. Used for requesting more results
@@ -62,60 +62,7 @@ public class StationsFragment extends Fragment {
      */
     boolean endOfList;
 
-    private class ConnectionChecker extends Thread {
-        private boolean isNetworkConnected() {
-            ConnectivityManager cm = (ConnectivityManager)getActivity()
-                                        .getSystemService(Context.CONNECTIVITY_SERVICE);
-            return cm.getActiveNetworkInfo() != null
-                    && cm.getActiveNetworkInfo().isConnected()
-                    && cm.getActiveNetworkInfo().isAvailable();
-        }
-
-        private boolean isConnectionAvailable() {
-            try {
-                InetAddress address = InetAddress.getByName("google.com");
-                return !address.equals("");
-            } catch (UnknownHostException e) {
-                return false;
-            }
-        }
-
-        public void run() {
-            String msg;
-
-            if (!isNetworkConnected()) {
-                msg = "Network not connected. Check it and try again later";
-            } else if (!isConnectionAvailable()) {
-                msg = "Internet access not available. Try again later";
-            } else {
-                return;
-            }
-
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Network connection error")
-                    .setMessage(msg)
-                    .setCancelable(false)
-                    .setNegativeButton("ОК",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                    System.exit(1);
-                                }
-                            });
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-            });
-        }
-    }
-
-
-
-    public StationsFragment()
-    {
+    public StationsFragment() {
     }
 
     @Override
@@ -182,36 +129,6 @@ public class StationsFragment extends Fragment {
         {
             this.searchOffset = 0;
             this.endOfList = false;
-
-            /**
-             * The list of stationsList has an setOnScrollListener()
-             * event to send a new request for more stationsList when
-             * the list has been scrolled almost to the end.
-             * However, in this scenario
-             *
-             * 1. start a new search (by editing the text in the
-             *    search box)
-             * 2. before the search is complete, close the keyboard
-             *    (eg. click the phone "back" button) or quickly
-             *    scroll to the bottom of the list
-             *
-             * what happens is this:
-             *
-             * 1. a new request is started for a new list of radios
-             * 2. because we're at the end of the list, a new request
-             *    for "more results" is started. Since this is requested
-             *    *after* 1., 2. overrides 1., and 1. doesn't complete.
-             *    Since 1. didn't complete, the old list wasn't cleared;
-             *    consequently the results from 2. are appended to the
-             *    old list (old results that should be removed instead).
-             *
-             * How does this line fix the issue? We simply remove the
-             * onScrollListener() from the old list, before firing
-             * request 1. Since this handler is now disabled, request 2.
-             * will never be started. The setOnScrollListener() will be set
-             * again when creating the new list (from the function
-             * void updateStationsList()).
-             */
             this.listView.setOnScrollListener(null);
         }
 
@@ -320,12 +237,6 @@ public class StationsFragment extends Fragment {
         String[] from = {"name"};
         int[] to = {R.id.radio_name};
 
-        /**
-         * If this is a request for more results, just notify
-         * the adapted that new data is available (ie. this.stationsList
-         * has changed).
-         * Otherwise, if this is a new request, create a new Adapter.
-         */
         if (more)
         {
             this.stationListAdapter.notifyDataSetChanged();
@@ -393,5 +304,55 @@ public class StationsFragment extends Fragment {
 
         // Hide loading icon
         this.loadingIcon.setVisibility(View.GONE);
+    }
+
+    private class ConnectionChecker extends Thread {
+        private boolean isNetworkConnected() {
+            ConnectivityManager cm = (ConnectivityManager)getActivity()
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            return cm.getActiveNetworkInfo() != null
+                    && cm.getActiveNetworkInfo().isConnected()
+                    && cm.getActiveNetworkInfo().isAvailable();
+        }
+
+        private boolean isConnectionAvailable() {
+            try {
+                InetAddress address = InetAddress.getByName("google.com");
+                return !address.equals("");
+            } catch (UnknownHostException e) {
+                return false;
+            }
+        }
+
+        public void run() {
+            String msg;
+
+            if (!isNetworkConnected()) {
+                msg = "Network not connected. Check it and try again later";
+            } else if (!isConnectionAvailable()) {
+                msg = "Internet access not available. Try again later";
+            } else {
+                return;
+            }
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Network connection error")
+                    .setMessage(msg)
+                    .setCancelable(false)
+                    .setNegativeButton("ОК",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    System.exit(1);
+                                }
+                            });
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            });
+        }
     }
 }

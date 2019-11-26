@@ -29,7 +29,6 @@ public class Recorder {
 
     private boolean isRecording;
     private Context context;
-
     private Player player;
     private Thread recordingThread;
 
