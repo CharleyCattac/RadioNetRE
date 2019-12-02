@@ -234,16 +234,9 @@ public class StationsFragment extends Fragment {
             // Detect when scrolling reaches the end of the list
             this.listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-                // The minimum amount of items to have below current scroll position, before loading more.
                 private int visibleThreshold = 10;
-
-                // The current page of data you have loaded
                 private int currentPage = 0;
-
-                // Total number of items loaded after the last load
                 private int previousTotal = 0;
-
-                // True if we are still waiting for the last set of data to load.
                 private boolean loading = true;
 
                 @Override

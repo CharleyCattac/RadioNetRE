@@ -50,7 +50,6 @@ public class LastPlayedFragment extends Fragment {
         // Retrieve list of stationsList
         this.loadLastPlayed();
 
-        // Inflate the layout for this fragment
         return thisView;
     }
 
