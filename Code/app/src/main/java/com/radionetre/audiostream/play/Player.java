@@ -90,8 +90,7 @@ public class Player {
             e.printStackTrace();
         }
     }
-
-    // Restart media player after pause
+    
     public void play() {
         if (player != null) {
             player.start();
