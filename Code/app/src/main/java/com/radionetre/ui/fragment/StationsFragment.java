@@ -21,10 +21,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.radionetre.ui.activity.MainActivity;
 import com.radionetre.R;
 import com.radionetre.ui.adapter.StationListAdapter;
-import com.radionetre.network.MetaDB;
+import com.radionetre.network.MetaReceiver;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,8 +67,7 @@ public class StationsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // The activity of this fragment
@@ -91,7 +91,6 @@ public class StationsFragment extends Fragment {
 
         this.search();
 
-        // Inflate the layout for this fragment
         return thisView;
     }
 
@@ -113,20 +112,12 @@ public class StationsFragment extends Fragment {
         this.search (query, false);
     }
 
-    /**
-     * Send a new search request.
-     *
-     * @param query The text input by the user
-     * @param more Should items be added at the bottom (more results)?
-     */
-    public void search (String query, final boolean more)
-    {
+    // Get new bunch of stations in search list
+    public void search (String query, final boolean more) {
         ConnectionChecker check = new ConnectionChecker();
         check.start();
 
-        // When making a new search, reset endOfList
-        if (!more)
-        {
+        if (!more) {
             this.searchOffset = 0;
             this.endOfList = false;
             this.listView.setOnScrollListener(null);
@@ -137,20 +128,16 @@ public class StationsFragment extends Fragment {
             return;
 
         this.lastSearchQuery = query;
-
-        // Show loading icon
         this.loadingIcon.setVisibility(View.VISIBLE);
 
         // Cancel old request if any was sent
         if (apiRequest != null)
-            apiRequest.cancel ();
-
-        // Log.i("API", MetaDB.getStationsEndpoint (this.lastSearchQuery, this.searchOffset));
+            apiRequest.cancel();
 
         // Create new request
         apiRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                MetaDB.getStationsEndpoint (this.lastSearchQuery, this.searchOffset),
+                getStationsEndpoint (this.lastSearchQuery, this.searchOffset),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -168,8 +155,7 @@ public class StationsFragment extends Fragment {
         this.apiRequestQueue.add (this.apiRequest);
     }
 
-    public void setClickCallback(MainActivity.StationListItem theCallback)
-    {
+    public void setClickCallback(MainActivity.StationListItem theCallback) {
         this.clickCallback = theCallback;
     }
 
@@ -177,51 +163,37 @@ public class StationsFragment extends Fragment {
     protected void updateStationsList (JSONObject data, boolean more) {
         JSONArray graph;
 
-        /**
-         * If requesting more results (instead of a new query),
-         * they will be appended to the list, so we don't need
-         * to initialize a new array.
-         */
         if (!more)
             this.stationsList = new ArrayList<HashMap<String, String>>();
 
         // Parse returned JSON
         try {
-
             graph = data.getJSONArray ("@graph");
 
             // No more elements returned, stop requesting more stuff.
-            if (graph.length() == 0)
-            {
+            if (graph.length() == 0) {
                 this.endOfList = true;
                 this.loadingIcon.setVisibility (View.GONE);
 
-                /**
-                 * If this is a call to request more results, quit
-                 * here because there isn't anything new.
-                 * If this was a new request, go on, such that the list
-                 * will be emptied (0 results).
-                 */
                 if (more)
                     return;
             }
 
-            for (int i = 0; i < graph.length(); i++)
-            {
-                JSONObject aRadio = graph.getJSONObject(i);
+            for (int i = 0; i < graph.length(); i++) {
+                JSONObject radio = graph.getJSONObject(i);
 
-                if (aRadio.has ("@id") &&
-                    aRadio.has ("schema:name") &&
-                    aRadio.has ("schema:url"))
+                if (radio.has ("@id") &&
+                    radio.has ("schema:name") &&
+                    radio.has ("schema:url"))
                 {
                     HashMap<String, String> aStationValues = new HashMap<>();
 
-                    aStationValues.put ("id", aRadio.getString("@id"));
-                    aStationValues.put ("name", aRadio.getString("schema:name"));
-                    aStationValues.put ("stream", aRadio.getJSONObject("schema:url").getString("@id"));
+                    aStationValues.put ("id", radio.getString("@id"));
+                    aStationValues.put ("name", radio.getString("schema:name"));
+                    aStationValues.put ("stream", radio.getJSONObject("schema:url").getString("@id"));
 
-                    if (aRadio.has ("schema:logo"))
-                        aStationValues.put ("logo", aRadio.getJSONObject("schema:logo").getString("@id"));
+                    if (radio.has ("schema:logo"))
+                        aStationValues.put ("logo", radio.getJSONObject("schema:logo").getString("@id"));
                     else
                         aStationValues.put ("logo", null);
 
@@ -232,13 +204,12 @@ public class StationsFragment extends Fragment {
         } catch (Exception e) {}
 
         // Increment offset for next request
-        this.searchOffset += MetaDB.LOAD_LIMIT;
+        this.searchOffset += LOAD_LIMIT;
 
         String[] from = {"name"};
         int[] to = {R.id.radio_name};
 
-        if (more)
-        {
+        if (more) {
             this.stationListAdapter.notifyDataSetChanged();
         } else {
             this.stationListAdapter = new StationListAdapter(
@@ -302,7 +273,6 @@ public class StationsFragment extends Fragment {
             });
         }
 
-        // Hide loading icon
         this.loadingIcon.setVisibility(View.GONE);
     }
 

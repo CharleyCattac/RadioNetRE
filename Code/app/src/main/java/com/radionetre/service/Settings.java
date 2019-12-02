@@ -18,10 +18,8 @@ public class Settings {
 
     //singleton implementation
     private static Settings instance = new Settings();
-
     private Settings() {
     }
-
     public static Settings getInstance() {
         return instance;
     }

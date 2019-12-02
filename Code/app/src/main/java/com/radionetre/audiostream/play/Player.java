@@ -13,7 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.radionetre.R;
-import com.radionetre.network.Icecast;
+import com.radionetre.network.MetaParser;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,10 +26,8 @@ public class Player {
 
     //singleton implementation
     private static Player instance = new Player();
-
     private Player() {
     }
-
     public static Player getInstance() {
         return instance;
     }
@@ -41,16 +39,13 @@ public class Player {
     private HashMap<String, String> radio;
     private MediaPlayer player;
     protected Activity context;
-
-    /**
-     * Timer to poll stream metadata every once in a while.
-     * I don't know if Icecast supports push events, so I'm
-     * sending a request for metadata every minute.
+    /*
+     Timer to poll stream metadata every once in a while.
+     (sending a request for metadata every minute)
      */
     private static Timer metadataTimer;
-
-    /**
-     * The notification that will be displayed in the notification drawer.
+    /*
+     The notification that will be displayed in the notification drawer.
      */
     private static NotificationCompat.Builder streamNotification;
 
@@ -98,21 +93,14 @@ public class Player {
 
     // Restart media player after pause
     public void play() {
-        if (player != null)
-        {
+        if (player != null) {
             player.start();
-            fetchIcecastData();
+            fetchMetaData();
         }
     }
 
-
-    /**
-     * Do not pause radio. "Pause" caches the stream, so when we play()
-     * it again later, it will restart from where it was paused.
-     */
     public void pause() {
-        if (player != null)
-        {
+        if (player != null) {
             player.pause();
             stopFetchingIcecastData();
         }
@@ -120,19 +108,9 @@ public class Player {
 
     public void playPause() {
         if (player != null)
-            if (player.isPlaying())
-            {
-                stopFetchingIcecastData();
+            if (player.isPlaying()) {
+                stopFetchingMetaData();
 
-                /**
-                 * Stop and reset the MediaPlayer.
-                 * The reason we reset() after stop() is because when
-                 * prepareAsync() is called after stop(), the stream
-                 * stops automatically after a few second. Looks like
-                 * it empties the stream cache and then stops. I don't
-                 * know why this is happening, so we just return to the
-                 * Idle() state and re-initialize the data source again.
-                 */
                 player.stop();
                 player.reset();
 
@@ -150,9 +128,8 @@ public class Player {
     }
 
     public void stop() {
-        if (player != null)
-        {
-            stopFetchingIcecastData();
+        if (player != null) {
+            stopFetchingMetaData();
 
             player.stop();
             player.release();
@@ -163,33 +140,29 @@ public class Player {
         }
     }
 
-    public void fetchIcecastData() {
+    public void fetchMetaData() {
         // Stop any previous task fetching data
-        stopFetchingIcecastData();
+        stopFetchingMetaData();
 
-        /**
-         * When a timer is no longer needed, users should call cancel(),
-         * which releases the timer's thread and other resources. Timers
-         * not explicitly cancelled may hold resources indefinitely.
-         */
         Player.metadataTimer = new Timer();
 
         // Fetch data automatically every few minutes
         Player.metadataTimer.schedule(
             new TimerTask() {
                 @Override
-                public void run()
-                {
+                public void run() {
+
                     String songMetadata = "";
 
                     try {
                         Map<String, String> metadata =
-                            Icecast.getMetadata(new URL(radio.get("stream")));
+                            getMetadata(new URL(radio.get("stream")));
 
-                        if (metadata != null)
+                        if (metadata != null) {
                             songMetadata = metadata.get("StreamTitle").trim();
+                        }
                     } catch (Exception e) {
-                        // e.printStackTrace();
+                        e.printStackTrace();
                     }
 
                     // Update notification with new metadata about current song
@@ -207,45 +180,12 @@ public class Player {
             0, 60000);
     }
 
-    public void stopFetchingIcecastData() {
-        if (Player.metadataTimer != null)
-        {
+    public void stopFetchingMetaData() {
+        if (Player.metadataTimer != null) {
             Player.metadataTimer.cancel();
             Player.metadataTimer.purge();
             Player.metadataTimer = null;
         }
-    }
-
-    /**
-     * Show/Hide extended notification with Play/Stop buttons
-     */
-    public void togglePlayerCompact() {
-        if (context == null)
-            return;
-
-        // Play/Pause intent when tapping the notification
-        Intent play_intent = new Intent(context, PlayPause.class);
-        PendingIntent play_pintent = PendingIntent.getBroadcast(context, 0, play_intent, 0);
-
-        // Stop intent when removing the notification
-        Intent stop_intent = new Intent(context, Stop.class);
-        PendingIntent stop_pintent = PendingIntent.getBroadcast(context, 0, stop_intent, 0);
-
-        Player.streamNotification
-            // Add intent when tapping the notification
-            .setContentIntent(play_pintent)
-            // Add intent when removing notification
-            .setDeleteIntent(stop_pintent);
-
-        // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-            (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-
-        // Builds the notification and issues it.
-        // Because the ID remains unchanged, the existing notification is updated
-        mNotifyMgr.notify (
-            NOTIFICATION_ID,
-            streamNotification.build());
     }
 
     // Show a notification about the new stream
@@ -257,20 +197,13 @@ public class Player {
 
         Player.streamNotification = new NotificationCompat.Builder(context)
             .setAutoCancel(false)
-            // Show controls on lock screen even when user hides sensitive content.
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSmallIcon(R.drawable.ic_graphic_eq)
             .setContentTitle(radioName)
             .setContentText(context.getString(R.string.notification_buffering))
-            //.setLargeIcon(albumArtBitmap)
             .setTicker(context.getString(R.string.notification_buffering) + " " + radioName)
-            // Display datetime in notification
             .setShowWhen(true)
-            // Show elapsed time instead of creation time
             .setUsesChronometer(true);
-
-        // If not compact player, show notification buttons
-        togglePlayerCompact();
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr =
@@ -284,44 +217,37 @@ public class Player {
         updateNotificationLargeIcon();
     }
 
-    // Change text when new Icecast data is available
+    // Change text when new meta data is available
     private void updateNotification(String content, String ticker, Bitmap largeIcon) {
         // Content is changed to update song info
-        if (content != null)
+        if (content != null) {
             Player.streamNotification.setContentText(content);
+        }
 
         // Show a new ticker
-        if (ticker != null)
-        {
-            // Remove leading/trailing spaces
+        if (ticker != null) {
             ticker = ticker.trim();
 
-            // Cut ticker message if it's too long
-            if (ticker.length() > TICKER_MAX_LENGTH)
+            if (ticker.length() > TICKER_MAX_LENGTH) {
                 ticker = ticker.substring(0, TICKER_MAX_LENGTH) + "...";
+            }
 
             Player.streamNotification.setTicker(ticker);
         }
 
-        // Update large icon in notification
-        if (largeIcon != null)
+        if (largeIcon != null) {
             Player.streamNotification.setLargeIcon(largeIcon);
+        }
 
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr =
                 (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
-        // Builds the notification and issues it.
-        // Because the ID remains unchanged, the existing notification is updated
         mNotifyMgr.notify (
             NOTIFICATION_ID,
             Player.streamNotification.build());
     }
 
-    /**
-     * Send a new async HTTP request to fetch radio image, and then
-     * upload the notification with the new logo.
-     */
     private void updateNotificationLargeIcon() {
         RequestQueue queue = Volley.newRequestQueue(context);
         ImageLoader imageLoader = new ImageLoader(queue, new ImageLoader.ImageCache() {

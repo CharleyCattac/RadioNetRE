@@ -33,8 +33,6 @@ public class LastPlayedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // The activity of this fragment
         this.fragmentActivity = this.getActivity();
     }
 
@@ -85,8 +83,7 @@ public class LastPlayedFragment extends Fragment {
 
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> thisRadio = lastPlayed.get(position);
 
                 if (stationListItem != null)

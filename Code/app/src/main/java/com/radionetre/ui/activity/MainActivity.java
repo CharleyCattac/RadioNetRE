@@ -29,8 +29,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
     /**
-     * Used as callback from fragments when clicking an item,
-     * to upload the list of last played stations.
+     Used as callback from fragments when clicking an item,
+     to upload the list of last played stations.
      */
     public interface StationListItem {
         // Start streaming

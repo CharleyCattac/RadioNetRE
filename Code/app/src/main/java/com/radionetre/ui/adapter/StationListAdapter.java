@@ -18,9 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Adapter to create a station item
- */
 public class StationListAdapter extends SimpleAdapter {
     RequestQueue queue;
     ArrayList<HashMap<String, String>> stations;
@@ -29,8 +26,8 @@ public class StationListAdapter extends SimpleAdapter {
             Context context,
             List<? extends Map<String, ?>> stations,
             int resource,
-            String[] from, int[] to)
-    {
+            String[] from, int[] to) {
+
         super(context, stations, resource, from, to);
 
         this.queue = Volley.newRequestQueue(context);
@@ -38,12 +35,8 @@ public class StationListAdapter extends SimpleAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        /**
-         * Let SimpleAdapter built the view normally.
-         * This will inflate text fields.
-         */
+    public View getView(int position, View convertView, ViewGroup parent) {
+
         View v = super.getView(position, convertView, parent);
 
         // Now we need to custom-load the pictures
@@ -54,8 +47,7 @@ public class StationListAdapter extends SimpleAdapter {
         String url = this.stations.get(position).get("logo");
 
         // Retrieve image
-        if (url != null)
-        {
+        if (url != null) {
             ImageLoader.ImageCache icache =
                 new ImageLoader.ImageCache() {
                     // Documentation: https://developer.android.com/reference/android/util/LruCache.html
@@ -74,26 +66,6 @@ public class StationListAdapter extends SimpleAdapter {
                 };
 
             myImageLoader = new ImageLoader(queue, icache);
-
-            /* This code was in place to display a loading image
-             * while the remote radio logo was being fetched.
-             * The problem with this is that the NetworkImageView
-             * components are recycled when scrolling the ListView.
-             * The result is that pictures keep changing frantically
-             * as HTTP requests return.
-             *
-             * I don't understand what's going on... so for the moment
-             * this will stay commented out.
-             *
-            myImageLoader.get(
-                url,
-                ImageLoader.getImageListener(
-                    myNetworkImageView,
-                    0,     // Placeholder
-                    0));   // Error
-            */
-
-            // Set the URL of the NetworkImageView
             myNetworkImageView.setImageUrl(url, myImageLoader);
         }
 

@@ -10,22 +10,21 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Icecast {
+public class MetaParser {
 
-    protected static Map<String, String> parseMetadata(String icecastString) {
+    protected static Map<String, String> parseMetadata(String metaString) {
         // Store (K,V) metadata here
         Map<String, String> metadata = new HashMap();
 
         // Icecast metadata is a string like "StreamTitle='';StreamUrl='';..."
-        String[] icecastProperties = icecastString.split(";");
+        String[] properties = metaString.split(";");
 
         // Match this regex to find icecast properties like "StreamTitle=''"
         Pattern regexPattern = Pattern.compile("^([a-zA-Z]+)=\\'(.*)\\'$");
 
         Matcher regexMatcher;
-        for (int i = 0; i < icecastProperties.length; i++)
-        {
-            regexMatcher = regexPattern.matcher(icecastProperties[i]);
+        for (int i = 0; i < properties.length; i++) {
+            regexMatcher = regexPattern.matcher(properties[i]);
 
             // Found a match?
             if (regexMatcher.find())
@@ -77,9 +76,11 @@ public class Icecast {
             inData = bytesCount > metadataOffset + 1 &&
                      bytesCount < metadataOffset + metadataLength;
 
-            if (inData)
-                if (aByte != 0)
+            if (inData) {
+                if (aByte != 0) {
                     metadata.append((char) aByte);
+                }
+            }
 
             if (bytesCount > metadataOffset + metadataLength)
                 break;
@@ -88,8 +89,6 @@ public class Icecast {
 
         // Close HTTP stream
         stream.close();
-
-        // Return all metadata
-        return Icecast.parseMetadata(metadata.toString());
+        return parseMetadata(metadata.toString());
     }
 }

@@ -15,14 +15,11 @@ import java.net.URL;
 import java.util.Calendar;
 
 public class Recorder {
-
     //singleton implementation
     private static Recorder instance = new Recorder();
-
     private Recorder() {
         player = Player.getInstance();
     }
-
     public static Recorder getInstance() {
         return instance;
     }
