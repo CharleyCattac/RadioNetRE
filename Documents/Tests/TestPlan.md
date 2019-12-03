@@ -30,7 +30,7 @@
 # 3 Атрибуты качества  
 
 1. Функциональность:  
-    - функциональная полнота: приложение должно выполнять все заявленные [функции](https://github.com/shishov1610/MinskLandmarks/blob/master/Documentation/Requirements/Requirements%20Document.md#functional_requirements);
+    - функциональная полнота: приложение должно выполнять все заявленные в [SRS](https://github.com/Dmitry720/WebTasker/blob/master/Documents/Requirements/RequirementsDocument.md#31-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D1%82%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-) функции;
     - функциональная корректность: приложение должно выполнять все заявленные функции корректно;  
     - функциональная целесообразность: отсутствуют не заявленные функции, которые бы мешали приложению выполнять первоначально поставленные задачи
 2. Удобство использования:  
